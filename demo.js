@@ -46,8 +46,8 @@ function updateUI() {
 }
 
 function checkGameEnd() {
-    if (player1.score >= 20 || player2.score >= 20) {
-        endGame(`🎉 Player ${player1.score >= 20 ? 1 : 2} Wins!`);
+    if (player1.score >= 25 || player2.score >= 25) {
+        endGame(`🎉 Player ${player1.score >= 25 ? 1 : 2} Wins!`);
     } else if (player1.turns === 0 && player2.turns === 0) {
         let msg = player1.score > player2.score ? "🎉 Player 1 Wins!" :
             player2.score > player1.score ? "🎉 Player 2 Wins!" :
