@@ -3,13 +3,10 @@ let player2 = { turns: 10, score: 0 };
 let currentPlayer = 1;
 let gameOver = false;
 
-// Function to update active player highlighting
 function updateActivePlayer() {
-    // Remove active class from both players first
     document.querySelector('.player1').classList.remove('active-player');
     document.querySelector('.player2').classList.remove('active-player');
-    
-    // Add active class to current player
+
     if (currentPlayer === 1) {
         document.querySelector('.player1').classList.add('active-player');
     } else {
@@ -24,20 +21,17 @@ function rollDice() {
     const diceImage = `./images/dice-${diceValue}.png`;
 
     let player = currentPlayer === 1 ? player1 : player2;
-    
-    // Update dice image
+
     document.getElementById("dice1").setAttribute("src", diceImage);
-    
-    // Decrease turns only if not rolling a 6
+
     if (diceValue !== 6) {
         player.turns--;
         player.score += diceValue;
         document.getElementById("result").innerText = `Player ${currentPlayer} rolled ${diceValue}`;
     } else {
-        // On rolling 6, switch player without decreasing turns or adding score
         document.getElementById("result").innerText = `Player ${currentPlayer} rolled 6! Switching to other player`;
         currentPlayer = currentPlayer === 1 ? 2 : 1;
-        updateActivePlayer(); // Update highlighting when switching on 6
+        updateActivePlayer();
     }
 
     updateUI();
@@ -70,7 +64,6 @@ function endGame(message) {
     gameOver = true;
     document.getElementById("result").innerText = message;
     document.getElementById("dice-btn").disabled = true;
-    // Remove active player highlighting at game end
     document.querySelector('.player1').classList.remove('active-player');
     document.querySelector('.player2').classList.remove('active-player');
     setTimeout(resetGame, 3000);
@@ -87,10 +80,9 @@ function resetGame() {
     document.getElementById("dice-btn").disabled = false;
 
     updateUI();
-    updateActivePlayer(); // Set initial active player highlighting
+    updateActivePlayer();
 }
 
-// Call updateActivePlayer when the page loads
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     updateActivePlayer();
 });
