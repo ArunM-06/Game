@@ -1,7 +1,8 @@
-let player1 = { turns: 10, score: 0 };
-let player2 = { turns: 10, score: 0 };
+let player1 = { score: 0 };
+let player2 = { score: 0 };
 let currentPlayer = 1;
 let gameOver = false;
+let currentRound = 1;
 
 function updateActivePlayer() {
     document.querySelector('.player1').classList.remove('active-player');
@@ -21,42 +22,37 @@ function rollDice() {
     const diceImage = `./images/dice-${diceValue}.png`;
 
     let player = currentPlayer === 1 ? player1 : player2;
-
     document.getElementById("dice1").setAttribute("src", diceImage);
 
-    if (diceValue !== 6) {
-        player.turns--;
-        player.score += diceValue;
-        document.getElementById("result").innerText = `Player ${currentPlayer} rolled ${diceValue}`;
-    } else {
-        document.getElementById("result").innerText = `Player ${currentPlayer} rolled 6! Switching to other player`;
-        currentPlayer = currentPlayer === 1 ? 2 : 1;
-        updateActivePlayer();
+    player.score += diceValue;
+    document.getElementById("result").innerText = `Player ${currentPlayer} rolled ${diceValue}`;
+    currentPlayer = currentPlayer === 1 ? 2 : 1;
+    if (currentPlayer === 1) {
+        currentRound++;
     }
 
     updateUI();
+    updateActivePlayer();
     checkGameEnd();
 }
 
 function updateUI() {
-    document.getElementById("p1-chances").innerText = player1.turns;
-    document.getElementById("p2-chances").innerText = player2.turns;
+    document.getElementById("current-round").innerText = currentRound;
     document.getElementById("p1-score").innerText = player1.score;
     document.getElementById("p2-score").innerText = player2.score;
 }
 
 function checkGameEnd() {
-    if (player1.score >= 25 || player2.score >= 25) {
-        endGame(`🎉 Player ${player1.score >= 25 ? 1 : 2} Wins!`);
-    } else if (player1.turns === 0 && player2.turns === 0) {
-        let msg = player1.score > player2.score ? "🎉 Player 1 Wins!" :
-            player2.score > player1.score ? "🎉 Player 2 Wins!" :
-                "🤝 It's a Draw!";
-        endGame(`Game Over! ${msg}`);
-    } else if (player1.turns === 0 && player2.turns > 0) {
-        endGame("🎉 Player 2 Wins! (Player 1 ran out of chances)");
-    } else if (player2.turns === 0 && player1.turns > 0) {
-        endGame("🎉 Player 1 Wins! (Player 2 ran out of chances)");
+    if (currentRound > 10) {
+        let message;
+        if (player1.score > player2.score) {
+            message = `🎉 Player 1 Wins! Final Score: ${player1.score} - ${player2.score}`;
+        } else if (player2.score > player1.score) {
+            message = `🎉 Player 2 Wins! Final Score: ${player1.score} - ${player2.score}`;
+        } else {
+            message = `🤝 It's a Draw! Score: ${player1.score} - ${player2.score}`;
+        }
+        endGame(message);
     }
 }
 
@@ -70,9 +66,10 @@ function endGame(message) {
 }
 
 function resetGame() {
-    player1 = { turns: 10, score: 0 };
-    player2 = { turns: 10, score: 0 };
+    player1 = { score: 0 };
+    player2 = { score: 0 };
     currentPlayer = 1;
+    currentRound = 1;
     gameOver = false;
 
     document.getElementById("dice1").src = "./images/dice-1.png";
