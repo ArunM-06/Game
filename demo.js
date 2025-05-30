@@ -1,59 +1,72 @@
-let player1 = { score: 0 };
-let player2 = { score: 0 };
+// Game state
+const WINNING_ROLL = 6;
+const MAX_ROUNDS = 3;
+
+let player1 = { score: 0, roundComplete: false };
+let player2 = { score: 0, roundComplete: false };
 let currentPlayer = 1;
-let gameOver = false;
 let currentRound = 1;
+let gameOver = false;
 
-function updateActivePlayer() {
-    document.querySelector('.player1').classList.remove('active-player');
-    document.querySelector('.player2').classList.remove('active-player');
-
-    if (currentPlayer === 1) {
-        document.querySelector('.player1').classList.add('active-player');
-    } else {
-        document.querySelector('.player2').classList.add('active-player');
-    }
-}
-
-function rollDice() {
-    if (gameOver) return;
-
-    const diceValue = Math.floor(Math.random() * 6) + 1;
-    const diceImage = `./images/dice-${diceValue}.png`;
-
-    let player = currentPlayer === 1 ? player1 : player2;
-    document.getElementById("dice1").setAttribute("src", diceImage);
-
-    player.score += diceValue;
-    document.getElementById("result").innerText = `Player ${currentPlayer} rolled ${diceValue}`;
-    currentPlayer = currentPlayer === 1 ? 2 : 1;
-    if (currentPlayer === 1) {
-        currentRound++;
-    }
-
-    updateUI();
-    updateActivePlayer();
-    checkGameEnd();
-}
-
+// UI Updates
 function updateUI() {
     document.getElementById("current-round").innerText = currentRound;
     document.getElementById("p1-score").innerText = player1.score;
     document.getElementById("p2-score").innerText = player2.score;
+    
+    // Update active player highlight
+    document.querySelector('.player1').classList.toggle('active-player', currentPlayer === 1);
+    document.querySelector('.player2').classList.toggle('active-player', currentPlayer === 2);
 }
 
-function checkGameEnd() {
-    if (currentRound > 10) {
-        let message;
-        if (player1.score > player2.score) {
-            message = `🎉 Player 1 Wins! Final Score: ${player1.score} - ${player2.score}`;
-        } else if (player2.score > player1.score) {
-            message = `🎉 Player 2 Wins! Final Score: ${player1.score} - ${player2.score}`;
-        } else {
-            message = `🤝 It's a Draw! Score: ${player1.score} - ${player2.score}`;
-        }
-        endGame(message);
+// Game Logic
+function rollDice() {
+    if (gameOver) return;
+
+    const diceValue = Math.floor(Math.random() * 6) + 1;
+    const player = currentPlayer === 1 ? player1 : player2;
+    
+    // Update UI
+    document.getElementById("dice1").setAttribute("src", `./images/dice-${diceValue}.png`);
+    player.score += diceValue;
+    
+    // Handle roll result
+    if (diceValue === WINNING_ROLL) {
+        player.roundComplete = true;
+        document.getElementById("result").innerText = `Player ${currentPlayer} rolled ${diceValue}! Round complete!`;
+        handlePlayerSwitch();
+    } else {
+        document.getElementById("result").innerText = `Player ${currentPlayer} rolled ${diceValue}. Roll again!`;
     }
+
+    updateUI();
+}
+
+function handlePlayerSwitch() {
+    currentPlayer = currentPlayer === 1 ? 2 : 1;
+    
+    if (player1.roundComplete && player2.roundComplete) {
+        if (currentRound < MAX_ROUNDS) {
+            startNewRound();
+        } else {
+            endGame(getWinningMessage());
+        }
+    }
+}
+
+function startNewRound() {
+    currentRound++;
+    player1.roundComplete = false;
+    player2.roundComplete = false;
+    document.getElementById("result").innerText = `Round ${currentRound} begins!`;
+}
+
+function getWinningMessage() {
+    if (player1.score === player2.score) {
+        return `🤝 It's a Draw! Score: ${player1.score} - ${player2.score}`;
+    }
+    const winner = player1.score > player2.score ? 1 : 2;
+    return `🎉 Player ${winner} Wins! Final Score: ${player1.score} - ${player2.score}`;
 }
 
 function endGame(message) {
@@ -62,12 +75,11 @@ function endGame(message) {
     document.getElementById("dice-btn").disabled = true;
     document.querySelector('.player1').classList.remove('active-player');
     document.querySelector('.player2').classList.remove('active-player');
-    setTimeout(resetGame, 3000);
 }
 
 function resetGame() {
-    player1 = { score: 0 };
-    player2 = { score: 0 };
+    player1 = { score: 0, roundComplete: false };
+    player2 = { score: 0, roundComplete: false };
     currentPlayer = 1;
     currentRound = 1;
     gameOver = false;
@@ -77,9 +89,7 @@ function resetGame() {
     document.getElementById("dice-btn").disabled = false;
 
     updateUI();
-    updateActivePlayer();
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    updateActivePlayer();
-});
+// Initialize game
+document.addEventListener('DOMContentLoaded', updateUI);
