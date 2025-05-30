@@ -2,51 +2,61 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     background: linear-gradient(90deg, #8c52ff, #ff914d);
+    overflow: hidden;
 }
 
 .title {
     width: 100%;
     text-align: center;
-    padding: 20px 0;
-    margin-bottom: 20px;
-    margin-top: 20px;
+    padding: 10px 0;
+    margin-bottom: 10px;
 }
 
 .title h1 {
     color: white;
-    font-size: 2.5em;
+    font-size: 2em;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     margin: 0;
 }
 
 .game {
     width: 100%;
-    max-width: 1000px;
-    padding: 20px;
+    max-width: 900px;
+    padding: 10px;
+}
+
+.round-display {
+    text-align: center;
+    font-size: 20px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 8px 16px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .game-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 10px;
 }
 
 .player-section {
     text-align: center;
-    padding: 20px;
+    padding: 15px;
     border-radius: 15px;
     color: white;
-    width: 250px;
-    /* transition: background-color 0.3s ease; */
+    width: 200px;
 }
 
-/* Active player styles */
 .player-section.active-player {
     background-color: rgba(255, 255, 255, 0.3);
     box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
@@ -56,49 +66,44 @@ body {
 
 .player1 .player-header {
     background-color: #ff0000;
-    padding: 10px;
+    padding: 8px;
     border-radius: 10px;
-    margin-bottom: 20px;
-    font-size: 20px;
+    margin-bottom: 15px;
+    font-size: 18px;
     font-weight: bold;
 }
 
 .player2 .player-header {
     background-color: #ffd700;
-    padding: 10px;
+    padding: 8px;
     border-radius: 10px;
-    margin-bottom: 20px;
-    font-size: 20px;
+    margin-bottom: 15px;
+    font-size: 18px;
     font-weight: bold;
 }
 
 .score-label {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
-    margin: 10px 0;
+    margin: 8px 0;
     color: black;
 }
 
 .score-value {
-    font-size: 72px;
+    font-size: 48px;
     font-weight: bold;
-    margin: 10px 0;
-}
-
-.chances {
-    font-size: 18px;
-    margin-top: 10px;
+    margin: 8px 0;
 }
 
 .center-section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
 }
 
 .vs-text {
-    font-size: 80px;
+    font-size: 60px;
     font-weight: 900;
     font-family: Arial, sans-serif;
     color: #ff69b4;
@@ -112,22 +117,28 @@ body {
 }
 
 .main-dice {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     border: 3px solid #333;
     border-radius: 15px;
-    padding: 10px;
+    padding: 8px;
     background-color: black;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-.play-button {
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.play-button, .new-game-button {
     background-color: #ff4757;
     color: white;
     border: none;
-    padding: 12px 40px;
+    padding: 8px 25px;
     border-radius: 25px;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     box-shadow:
@@ -136,34 +147,25 @@ body {
         -2px 10px 0 #000,
         2px 2px 0 #000;
     transform: skew(-5deg);
-
 }
 
-.play-button:hover {
+.new-game-button {
+    background-color: #2ecc71;
+}
+
+.play-button:hover, .new-game-button:hover {
     transform: scale(1.05);
 }
 
-.play-button:disabled {
+.play-button:disabled, .new-game-button:disabled {
     background-color: #999;
     cursor: not-allowed;
 }
 
 .result-text {
     text-align: center;
-    font-size: 24px;
+    font-size: 20px;
     color: white;
-    margin-top: 20px;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.round-display {
-    text-align: center;
-    font-size: 24px;
-    color: white;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 10px 20px;
-    border-radius: 15px;
-    margin-bottom: 20px;
-    font-weight: bold;
+    margin-top: 15px;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
